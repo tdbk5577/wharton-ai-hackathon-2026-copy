@@ -1,0 +1,179 @@
+# Ask What Matters: Adaptive AI for Smarter Travel Reviews
+
+## Competition Workbook
+
+*This workbook is designed to help your team plan, design, and build your submission for the Hack-AI-thon. Use it as a guide to structure decisions, document assumptions, and prepare deliverables. Your final submission must follow the Hack-AI-thon Submission Requirements.*
+
+# Your Challenge
+
+This year’s business challenge tasks teams with creating a tool to enhance the review process both for existing guests leaving reviews on properties (e.g., hotels) and for future guests seeking current, complete information before they travel. For guests leaving reviews, this system should dynamically generate personalized questions for users, delivered via voice or text, that are smooth and easy to interact with. This tool should help to fill specific data gaps or refresh information about properties to ensure review information is current and complete for future guests. This aims to increase the quantity and quality of reviews while reducing user cognitive load.
+
+Reviews are rich, but inconsistent: some topics are over-covered, some are missing, and some get stale fast (amenities change, renovations happen, policies shift). Static review prompts don’t adapt. Your challenge is to build a system that **detects what matters for a specific property right now** and **generates** **low-friction questions** to fill those gaps.
+
+## What you’re building
+
+Build a prototype that asks a traveler **1–2 smart follow-up questions** while they leave a review (via text or voice input). The goal is to **collect missing or outdated info** about a property while **prioritizing a smooth experience** for reviewers.
+
+Think: “What information is unknown or outdated about this property, and what’s the easiest way to learn it?”
+
+A strong solution will:
+
+* Identify what information is missing or stale for a given property  
+* Ask 1-2 questions that directly target those gaps  
+* Collect answers from travelers in a low-friction way (via voice or text) as part of the property review process  
+* Show how those answers could improve the property’s information
+
+## 
+
+## Submission Overview
+
+Your submission will include your team’s working prototype and supporting materials:
+
+* **Prototype link**: a single, public link where the prototype can be viewed and tested  
+* **Project repository link**: all code is open source and in a GitHub repo submitted to our GitHub Classroom  
+* **Demo video (3-5 minutes, recorded in real time)**: your video is a key part of your submission—use it to bring your project to life. Your video should be a mp4/avi walkthrough clearly showing judges the problem, approach, and key functionality of your tool and prototype, and must be recorded in real time (sped-up videos are disqualified)  
+* **Pitch deck (8-12 slides, supporting 10-minute presentation)**: Your team’s slide deck should clearly and efficiently support your live finals presentation and demo, helping judges quickly understand the problem addressed by your tool, your AI-driven solution, technical approach and demo flow, and why it matters. These will be the slides used if your team advances to finals.  
+* **Supporting materials (optional)**: additional documentation, slides, citations, or PDFs that help reviewers understand the tool. Any data used should be publicly-available and cited. 
+
+## Deadline
+
+All submissions for the Hack-AI-Thon are due in [SurveyMonkey Apply](https://analyticsatwharton.smapply.io/prog/2026_wharton_hack-ai-thon/) by **Thursday, April 16 at 9:00 AM ET**. Late submissions will not be considered. All submission materials must be submitted by your Team Leader (the person who registered your team for the competition).
+
+# 
+
+# Important Details
+
+## Hack-AI-Thon Timeline
+
+| Date & Time (ET) | What’s happening | What you should do |
+| ----- | ----- | ----- |
+| **Mon, Apr 13, 2026 (12:00–1:00 PM)** | **Program Kick-off (Virtual)** — challenge intro \+ remarks from Expedia | Make sure your team understands the prompt, deliverables, and constraints. Assign roles and pick a simple MVP plan. |
+| **Tue, Apr 14, 2026 (4:00 PM-6:00PM)** | **WAIAI Data Team \+ Expedia Group Office Hours (Virtual)** | Come with specific questions: data fields, feasibility, evaluation ideas, and what a “good” prototype looks like. Aim to leave with a locked approach. Join via the Zoom Link, [here](https://upenn.zoom.us/j/95925632394?pwd=fKXCQaBFCSvJYyH6HeeLaoHGQJw6Sg.1&from=addon). |
+| **Thu, Apr 16, 2026 (9:00 AM)** | **Submission Deadline** | Submit all required links/files early (don’t wait until 8:59). Verify: prototype loads, repo README is clear, video plays, deck exports correctly. |
+| **Thu, Apr 16, 2026 (5:00 PM)** | **Finalists Announced (IG Live with Expedia)** | Tune in to the [@whartonaiai](https://www.instagram.com/whartonaiai) account. If you’re a finalist, regroup immediately: tighten demo, rehearse, and prep for in-person finals. |
+| **Fri, Apr 17, 2026 (9:00 AM–3:00 PM)** | **Hack-AI-thon Finals (In person)** | Be ready to present: demo your prototype live, explain your approach clearly, and answer judge questions. Bring a backup plan (screenshots/video) in case of Wi-Fi issues. |
+
+## Resources and Important Links
+
+During the Hack-AI-thon, you will have access to curated data, technical tools, and mentorship to support your solution development. Many of these resources can be found in [this folder](https://upenn.box.com/s/movhcu8k6oj6q1lgsk7bu2woom8jk2vj), and individual links to each resource can be found below. Note that you will need to be logged into Box via your UPenn account to access the folder.
+
+* **Challenge Datasets:** You will receive a pair of structured datasets prepared specifically for this challenge (including relevant business and contextual variables), along with any supporting documentation needed to interpret the data.  
+  * **Data Dictionary:** The data dictionary, which includes the variable names and descriptions for both datasets, can be found as a Markdown Doc in the resources folder and [at the end of this Workbook](#bookmark=id.qbdf9bizis12).  
+* **OpenAI API Access:** Each team will receive an OpenAI API key to build and test AI-powered components within their solution. This API key will be sent to the Team Leader via their school email. *Note: It is important to be mindful of security access to this API Key\! If the Key is published publically (via GitHub, for example) it will automatically shut off and a new key will need to be issued.*  
+* **Background materials** outlining the business problem, constraints, and success metrics will also be provided in this document and via the slides from the kick-off webinar in the [resource folder](https://upenn.box.com/s/movhcu8k6oj6q1lgsk7bu2woom8jk2vj).  
+* **Slack Workspace:** Shared channel for announcements, Q\&A, and peer collaboration. This will serve as the primary communication hub during the event. *Note: students can expect a response from WAIAI and/or Expedia staff members within 6 hours during regular business hours and up to 9PM. Messages sent after 9PM will be addressed the following day.*  
+* **Mentorship Hours:** Office hours with WAIAI Data Team Analysts and Expedia Data Scientists to ask technical questions, get feedback, and think through tradeoffs. Office hours will be held Tuesday, April 14 from 4 PM \- 6 PM via Zoom. [Join via the Zoom Link, here](https://upenn.zoom.us/j/95925632394?pwd=fKXCQaBFCSvJYyH6HeeLaoHGQJw6Sg.1&from=addon).  
+* [**SurveyMonkey Apply**](https://analyticsatwharton.smapply.io/prog/2026_wharton_hack-ai-thon/)**:** The official submission portal for the Hack-AI-thon. All final deliverables — including your presentation materials and any required documentation — must be uploaded here by your Team Leader.  
+* [**Competition Website**](https://ai-analytics.wharton.upenn.edu/for-students/wharton-hack-ai-thon/)**:** The central hub for high-level event information. Check out the site to see what past Hack-AI-thon teams have submitted.
+
+Student Teams are not limited to the resources provided here, and we encourage you to seek additional resources as needed\! If your team uses additional data and resources, they should be cited in your submission materials.
+
+## Judging Criteria
+
+Your materials should clearly communicate how your solution uses dynamic question generation to capture missing or outdated property information, and how multimodal text and voice interactions reduce user effort. *Submissions will be evaluated across the following six categories:*
+
+* **Innovation and Creativity**: Originality of the concept and the degree to which AI is used in a novel, meaningful way to address work-related challenges.  Note: projects are meant to be developed within the timeframe of the hack-ai-thon. Any projects that have been created or developed outside of the competition dates will be disqualified.  
+* **Technical Implementation**: Soundness of the technical approach, including quality of engineering, appropriate model/tool use, and overall robustness of the prototype.   
+* **User Experience and Design**: Clarity, accessibility, and usability of the interface and workflow for the intended audience.  
+* **Opportunity and Impact Potential**: Strength of the anticipated impact; practical value for real-world users.  
+* **Feasibility and Scalability**: Practicality of deployment, maintenance considerations, and the ability for the solution to scale to broader use. Any data used should be publicly-available and cited.  
+* **Presentation**: Clarity and effectiveness of the recorded demo, strength of communication, and how well the team conveys the problem, solution, and value. *Note*: videos that fail to follow the outlined submission requirements will be disqualified.
+
+## 
+
+## Submission Requirements & Details
+
+Submissions for the Hack-AI-Thon are due in [SurveyMonkey Apply](https://analyticsatwharton.smapply.io/prog/2026_wharton_hack-ai-thon/) by **Thursday, April 16 at 9:00 AM ET**. Late submissions will not be considered. All submission materials must be submitted by your Team Leader (the person who registered your team for the competition).
+
+Your submission will include:
+
+## **1\. Link to your project/tool prototype**
+
+Submissions must include a live link to your working prototype. We've intentionally kept the hosting choice flexible, so that students can use the tools they are most familiar with. Judging will be entirely platform-agnostic. 
+
+Not sure which platform to use? The WAIAI Data team recommends the following free hosting sites: Vercel, GitHub Pages, Hugging Face Spaces, and Replit. *Important Note*: You may need to fork your Hack-AI-thon GitHub Classroom repo in order to host your app on certain platforms – you will still need to submit your final project code via GitHub Classroom.
+
+**2\. Link to your project repository in GitHub Classroom**
+
+All code for your tool should be shared in a GitHub repository via GitHub Classroom. Your GitHub repository will have an MIT License by default– please do not change this setting, your repository must retain this license in order for your team to advance. Any materials in your team’s GitHub repository should be ready to be shared publicly, so must not contain any OpenAI API keys as described in the Data Use Agreement.
+
+**3\. Your team’s 3–5 minute video presentation**
+
+Your video is a key part of your submission—use it to bring your project to life. The video should be 3–5 minutes max and clearly walk judges through your solution approach, and key functionality of your tool and prototype. 
+
+*Recommended Outline*:
+
+1. **Problem & Context**: Why this matters. Briefly explain the core business problem you’re tackling and what insight, frustration, or opportunity motivated your team’s approach.  
+2. **Your AI Solution**: What you built. Why this works. Clearly describe how your system addresses the business challenge and where and why AI is essential to your approach. Be explicit about assumptions you’re making about the data you have access to.  
+3. **Demo or Walkthrough**: Show how your prototype works, highlighting key features and user experience.  
+4. **Feasibility & Scalability**: Can this actually work? Briefly discuss how your approach could scale, any limitations of your current prototype, and what you intentionally did not try to solve.  
+5. **Wrap-Up**: Why your project stands out. End with a clear summary of what makes your approach to the business challenge different or better.
+
+*Tips for a Strong Video*
+
+* Keep it focused and clear—reviewers should immediately understand what challenge you are solving and how.  
+* Show the actual interface or user experience, even if it's a prototype.  
+* Speak with energy and clarity—your passion helps sell the idea.  
+* Use subtitles or captions if possible (not required, but helpful).  
+* Don’t stress about high production value—substance and clarity matter more.
+
+*Videos must be recorded in real time. **Sped-up videos will be disqualified**.*
+
+Upload your demo video (mp4 or avi, 3–5 minutes, maximum file size 1GB) in the SurveyMonkey Apply submission form.
+
+**4\. Upload your pitch slide deck**
+
+Your slide deck should clearly and efficiently support your live finals presentation and demo, helping judges quickly understand the business problem, your AI-driven solution, and why it matters. Aim for no more than 8–12 slides that tell a coherent story from problem context to impact, balancing clarity for non-technical judges with enough technical depth to justify your design choices. Slides should prioritize structure, diagrams, and examples over dense text, and clearly set up the demo flow the judges are about to see. This deck will be used if your team advances to the finals. Plan for a presentation that’s about 10 minutes long, with 5 minutes for Q\&A.
+
+*Your deck should cover*:
+
+* The core problem and why static review questions fail  
+* Your solution and where it fits in the review experience  
+* How AI is used to identify gaps and generate targeted questions  
+* A simple system workflow or architecture  
+* Demo flow and expected user experience  
+* User and business impact  
+* Feasibility, scalability, and key limitations  
+* Why your approach stands out
+
+**5\. Any supporting resources, information, or materials (optional)**
+
+Add any additional links, resources, or information you would like the judges to consider. Any data used should be publicly-available and cited.
+
+# Data Dictionary
+
+The data dictionary provides brief descriptions about the variables in the provided datasets (Description\_PROC.csv and Reviews\_PROC.csv). Students should use these datasets to inform their information gap analyses and develop their prototypes for the Hack-AI-Thon.
+
+## Description\_PROC
+
+Overall description of property, location, amenities and key policies.
+
+* \[primary key\] eg\_property\_id: Unique property identifier  
+* guestrating\_avg\_expedia: Average guest review rating  
+* city: Location- city  
+* province: Location- province  
+* country: Location- country  
+* star\_rating: Hotel star level (1-5) indicating luxury and amenity class  
+* area\_description: Short description of property location  
+* property\_description: Short description of property  
+* popular\_amenities\_list: Highlighted amenities  
+* property\_amenity\_\*: Amenity highlights organized by specific sub-categories	  
+* check\_in\_start\_time: Earliest check-in time  
+* check\_in\_end\_time: End of check-in window  
+* check\_out\_time: Latest check-out time  
+* check\_out\_policy: Additional explanation of check in/out policies  
+* pet\_policy: Pet policy description  
+* children\_and\_extra\_bed\_policy: Policies for children and extra beds  
+* check\_in\_instructions: Additional details about check-in process  
+* know\_before\_you\_go: Additional notes and policies for the property
+
+## Reviews\_PROC
+
+Reviews for targeted properties.
+
+* \[primary key\] eg\_property\_id: Unique property identifier  
+* acquisition\_date: Date of review submission  
+* lob: Line of business (inventory type)  
+* rating: Guest review rating, broken down by sub-category. Rating scale 1-5, with 0 indicating NULL/no rating  
+* review\_title: Guest review title  
+* review\_text: Full review text
