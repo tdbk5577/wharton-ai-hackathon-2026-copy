@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ask What Matters</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 24px;
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+
+    textarea, input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      font-family: inherit;
+      margin-bottom: 12px;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    button {
+      background: #0066cc;
+      color: white;
+      border: none;
+      padding: 12px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+
+    button:hover {
+      background: #0052a3;
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .question-section {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+      display: none;
+    }
+
+    .question-section.show {
+      display: block;
+    }
+
+    .question-text {
+      font-size: 18px;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    audio {
+      width: 100%;
+      margin-bottom: 15px;
+    }
+
+    .status {
+      font-size: 12px;
+      color: #666;
+      margin-top: 8px;
+      min-height: 16px;
+    }
+
+    .error {
+      background: #ffebee;
+      color: #c62828;
+      padding: 12px;
+      border-radius: 4px;
+      margin-top: 12px;
+      font-size: 13px;
+      display: none;
+    }
+
+    .error.show {
+      display: block;
+    }
+
+    .transcript {
+      background: #f0f0f0;
+      padding: 10px;
+      border-radius: 4px;
+      font-size: 13px;
+      margin-top: 12px;
+      display: none;
+    }
+
+    .transcript.show {
+      display: block;
+    }
+
+    .success {
+      color: #2e7d32;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎤 Ask What Matters</h1>
+    <p class="subtitle">Adaptive questions to fill review gaps</p>
+
+    <textarea id="review" placeholder="Enter your property review..." autofocus></textarea>
+    <button onclick="generateQuestion()" id="askBtn">Ask Me a Question</button>
+    <div class="status" id="status"></div>
+    <div class="error" id="error"></div>
+
+    <div class="question-section" id="questionSection">
+      <p class="question-text" id="questionText"></p>
+      <audio id="audio" controls></audio>
+
+      <div>
+        <button onclick="startRecording()" id="recordBtn">🎤 Record Answer</button>
+        <button onclick="stopRecording()" id="stopBtn" style="display:none;">Stop Recording</button>
+      </div>
+
+      <input type="text" id="answer" placeholder="Or type your answer...">
+      <button onclick="saveAnswer()">Save Answer</button>
+
+      <div class="transcript" id="transcript"></div>
+      <div class="status success" id="saved"></div>
+    </div>
+  </div>
+
+  <script>
+    let mediaRecorder;
+    let audioChunks = [];
+
+    async function generateQuestion() {
+      const review = document.getElementById('review').value;
+      if (!review.trim()) {
+        showError('Please enter a review');
+        return;
+      }
+
+      const btn = document.getElementById('askBtn');
+      btn.disabled = true;
+      btn.textContent = 'Generating...';
+      clearError();
+
+      try {
+        const res = await fetch('/api/generate-question', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reviewText: review })
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+
+        document.getElementById('questionText').textContent = data.question;
+        document.getElementById('audio').src = data.audio;
+        document.getElementById('questionSection').classList.add('show');
+        document.getElementById('saved').textContent = '';
+
+        setTimeout(() => {
+          document.getElementById('audio').play();
+        }, 100);
+
+      } catch (error) {
+        showError(error.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Ask Me a Question';
+      }
+    }
+
+    async function startRecording() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+
+        mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+        mediaRecorder.onstop = handleRecordingStop;
+
+        mediaRecorder.start();
+        document.getElementById('recordBtn').style.display = 'none';
+        document.getElementById('stopBtn').style.display = 'inline-block';
+        updateStatus('Recording...');
+
+      } catch (error) {
+        showError('Microphone access denied');
+      }
+    }
+
+    function stopRecording() {
+      mediaRecorder.stop();
+      document.getElementById('recordBtn').style.display = 'inline-block';
+      document.getElementById('stopBtn').style.display = 'none';
+    }
+
+    async function handleRecordingStop() {
+      const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+      updateStatus('Transcribing...');
+
+      try {
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+          const base64Audio = reader.result;
+
+          const res = await fetch('/api/transcribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ audioBase64: base64Audio })
+          });
+
+          if (!res.ok) throw new Error('Transcription failed');
+          const data = await res.json();
+
+          document.getElementById('answer').value = data.transcript;
+          document.getElementById('transcript').textContent = `You said: "${data.transcript}"`;
+          document.getElementById('transcript').classList.add('show');
+          updateStatus('');
+
+        };
+        reader.readAsDataURL(audioBlob);
+
+      } catch (error) {
+        showError('Failed to transcribe');
+        updateStatus('');
+      }
+    }
+
+    function saveAnswer() {
+      const answer = document.getElementById('answer').value;
+      if (!answer.trim()) {
+        showError('Please provide an answer');
+        return;
+      }
+
+      document.getElementById('saved').textContent = '✓ Answer saved';
+      setTimeout(() => {
+        document.getElementById('saved').textContent = '';
+      }, 2000);
+    }
+
+    function updateStatus(msg) {
+      document.getElementById('status').textContent = msg;
+    }
+
+    function showError(msg) {
+      const errorDiv = document.getElementById('error');
+      errorDiv.textContent = msg;
+      errorDiv.classList.add('show');
+    }
+
+    function clearError() {
+      const errorDiv = document.getElementById('error');
+      errorDiv.classList.remove('show');
+    }
+  </script>
+</body>
+</html>
