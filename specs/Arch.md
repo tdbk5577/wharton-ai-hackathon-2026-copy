@@ -123,7 +123,7 @@ const transcript = await openai.audio.transcriptions.create({
 
 ## Key Constraints
 
-1. **API Quota**: Monitor OpenAI usage (hackathon has limits)
+1. **API Quota**: Monitor OpenAI usage (hackathon has limits- no limits but judged on cost efficiency)
 2. **Latency**: TTS adds ~1-2 sec; acceptable for MVP
 3. **Fallbacks**: Always allow text input + text display
 4. **No auth needed**: Simple session-less design
