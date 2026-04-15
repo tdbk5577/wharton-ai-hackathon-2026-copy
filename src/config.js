@@ -1,7 +1,21 @@
 import { OpenAI } from 'openai';
 
-export const hasOpenAiKey = Boolean(process.env.OPENAI_API_KEY);
+const rawApiKey = String(process.env.OPENAI_API_KEY || '').trim();
+
+function isConfiguredOpenAiKey(value) {
+  if (!value) {
+    return false;
+  }
+
+  if (value === 'your_api_key_here') {
+    return false;
+  }
+
+  return value.startsWith('sk-');
+}
+
+export const hasOpenAiKey = isConfiguredOpenAiKey(rawApiKey);
 
 export const openai = hasOpenAiKey
-  ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+  ? new OpenAI({ apiKey: rawApiKey })
   : null;

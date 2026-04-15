@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "id": "075a2542-9e8d-46e0-a6c2-2797dcf017f7",
+    "propertyId": "db38b19b897dbece3e34919c662b3fd66d23b615395d11fb69264dd3a9b17723",
+    "reviewText": "Great location and friendly staff, but the room felt a little dated.",
+    "question": "How would you rate the cleanliness of your room during your stay?",
+    "answer": "It was plenty enough for me, but it can be updated because it was dingy.",
+    "answerSource": "voice",
+    "questionTargetTopic": "cleanliness",
+    "enrichedReviewSnippet": "Great location and friendly staff, but the room felt a little dated. The cleanliness was acceptable, though it appeared dingy and could use an update.",
+    "extractedTopics": [
+      "cleanliness"
+    ],
+    "whatWeLearned": "The room's cleanliness was acceptable, but it could benefit from updates due to a dingy appearance.",
+    "createdAt": "2026-04-15T16:05:47.143Z"
+  }
+]

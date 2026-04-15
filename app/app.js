@@ -25,10 +25,19 @@ async function loadBackendStatus() {
   try {
     const res = await fetch('/api/health');
     const data = await res.json();
+    const demoProperty = data.demoProperty || {
+      propertyName: 'Selected demo property',
+      city: null,
+      province: null,
+      country: null,
+      starRating: null,
+      amenities: [],
+      propertyDescription: 'Property context is unavailable, but the demo can still run.'
+    };
     document.getElementById('apiStatus').textContent = data.status === 'ok' ? 'Backend connected' : 'Backend unavailable';
     document.getElementById('modeStatus').textContent = data.openAiConfigured ? 'OpenAI live' : 'Fallback question mode';
-    document.getElementById('demoPropertyStatus').textContent = [data.demoProperty?.city, data.demoProperty?.province].filter(Boolean).join(', ') || 'Demo property ready';
-    renderPropertyContext(data.demoProperty);
+    document.getElementById('demoPropertyStatus').textContent = [demoProperty.city, demoProperty.province].filter(Boolean).join(', ') || 'Demo property ready';
+    renderPropertyContext(demoProperty);
   } catch {
     document.getElementById('apiStatus').textContent = 'Backend unavailable';
     document.getElementById('modeStatus').textContent = 'Unavailable';
@@ -76,22 +85,28 @@ async function generateQuestion() {
       throw new Error(data.error || `HTTP ${res.status}`);
     }
 
-    state.currentQuestion = data.questionAgent.questionText;
-    state.currentQuestionTargetTopic = data.gapAnalysisAgent.targetTopic;
-    state.currentAnswerSource = 'text';
-    state.gapAnalysisAgent = data.gapAnalysisAgent;
+    const gapAnalysisAgent = data.gapAnalysisAgent || {};
+    const questionText = data.questionAgent?.questionText || data.question;
+    if (!questionText) {
+      throw new Error('Question generation returned no question text.');
+    }
 
-    document.getElementById('questionText').textContent = data.questionAgent.questionText;
-    document.getElementById('recommendedGap').textContent = formatTopic(data.gapAnalysisAgent.targetTopic);
-    document.getElementById('questionTargetTopic').textContent = formatTopic(data.gapAnalysisAgent.targetTopic);
-    document.getElementById('sentimentSummary').textContent = data.gapAnalysisAgent.sentimentSummary;
-    document.getElementById('gapAgentReason').textContent = data.gapAnalysisAgent.reason;
+    state.currentQuestion = questionText;
+    state.currentQuestionTargetTopic = gapAnalysisAgent.targetTopic || data.questionTargetTopic || null;
+    state.currentAnswerSource = 'text';
+    state.gapAnalysisAgent = gapAnalysisAgent;
+
+    document.getElementById('questionText').textContent = questionText;
+    document.getElementById('recommendedGap').textContent = formatTopic(gapAnalysisAgent.targetTopic || data.recommendedGap);
+    document.getElementById('questionTargetTopic').textContent = formatTopic(gapAnalysisAgent.targetTopic || data.questionTargetTopic);
+    document.getElementById('sentimentSummary').textContent = gapAnalysisAgent.sentimentSummary || data.sentimentSummary || 'No sentiment summary available.';
+    document.getElementById('gapAgentReason').textContent = gapAnalysisAgent.reason || 'No gap-analysis reason returned.';
     document.getElementById('questionAgentMode').textContent = data.usedFallback
       ? 'Using local fallback question generation.'
       : 'Using OpenAI for question generation and text-to-speech.';
-    renderPropertyContext(data.gapAnalysisAgent.propertyContext);
-    renderChips('missingTopics', data.gapAnalysisAgent.missingTopics);
-    renderLines('gapAgentSignals', data.gapAnalysisAgent.supportingSignals);
+    renderPropertyContext(gapAnalysisAgent.propertyContext || null);
+    renderChips('missingTopics', gapAnalysisAgent.missingTopics || data.missingTopics || []);
+    renderLines('gapAgentSignals', gapAnalysisAgent.supportingSignals || []);
 
     document.getElementById('answer').value = '';
     document.getElementById('transcript').classList.remove('show');
@@ -235,17 +250,23 @@ async function saveAnswer() {
 }
 
 function renderPropertyContext(property) {
-  if (!property) {
-    return;
-  }
+  const resolvedProperty = property || {
+    propertyName: 'Selected demo property',
+    city: null,
+    province: null,
+    country: null,
+    starRating: null,
+    amenities: [],
+    propertyDescription: 'Property context is unavailable, but the demo can still run.'
+  };
 
-  document.getElementById('propertyName').textContent = property.propertyName || 'Selected demo property';
+  document.getElementById('propertyName').textContent = resolvedProperty.propertyName || 'Selected demo property';
   document.getElementById('propertyMeta').textContent = [
-    [property.city, property.province, property.country].filter(Boolean).join(', '),
-    property.starRating ? `${property.starRating}-star property` : null,
-    property.propertyDescription
+    [resolvedProperty.city, resolvedProperty.province, resolvedProperty.country].filter(Boolean).join(', '),
+    resolvedProperty.starRating ? `${resolvedProperty.starRating}-star property` : null,
+    resolvedProperty.propertyDescription
   ].filter(Boolean).join(' • ');
-  renderChips('propertyAmenities', property.amenities || []);
+  renderChips('propertyAmenities', resolvedProperty.amenities || []);
 }
 
 function renderSavedAnswers(answers) {

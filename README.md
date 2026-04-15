@@ -117,9 +117,27 @@ If `OPENAI_API_KEY` is missing:
 - The demo property defaults to Expedia property id `db38b19b897dbece3e34919c662b3fd66d23b615395d11fb69264dd3a9b17723`.
 - Saved answers are stored in `data/savedAnswers.json` for demo persistence.
 
+## Deployment
+
+The hackathon submission requires a **public prototype link**. That means:
+
+- for development, rehearsal, and video recording, `npm run dev` is enough
+- for the final submission form, you should also deploy the app to a public URL
+
+Recommended simple hosts:
+- Vercel
+- Replit
+- Hugging Face Spaces
+
+Minimum deployment checklist:
+- set `OPENAI_API_KEY` in the host environment
+- make sure `.env` is not committed
+- confirm the public link loads without any local setup
+- test at least one full review -> question -> save flow on the hosted app
+
 ## Submission Notes
 
-For local recording, `npm run dev` is enough. For final judge review, host the app on a public URL such as Vercel, Replit, or another simple platform and set `OPENAI_API_KEY` in the host environment.
+For local recording, `npm run dev` is enough. For the actual submission, provide the hosted public link in addition to the repository link.
 
 Before submission:
 - keep `data/savedAnswers.json` empty or with only intentional demo records
