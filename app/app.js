@@ -19,6 +19,7 @@ initialize();
 
 async function initialize() {
   await Promise.all([loadBackendStatus(), loadSavedAnswers()]);
+  await generateQuestion();
 }
 
 async function loadBackendStatus() {
@@ -56,19 +57,13 @@ async function loadSavedAnswers() {
 }
 
 async function generateQuestion() {
-  const review = document.getElementById('review').value.trim();
-  if (!review) {
-    showError('Please enter a review.');
-    return;
-  }
-
   const btn = document.getElementById('askBtn');
   btn.disabled = true;
-  btn.textContent = 'Generating...';
+  btn.textContent = 'Loading...';
   clearError();
   clearSavedNotice();
   resetIntegrationUI();
-  updateStatus('Generating a follow-up question...');
+  updateStatus('Analyzing property reviews...');
 
   try {
     const res = await fetch('/api/generate-question', {
@@ -76,7 +71,7 @@ async function generateQuestion() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         propertyId: state.propertyId,
-        reviewText: review
+        reviewText: ''
       })
     });
 
@@ -127,7 +122,7 @@ async function generateQuestion() {
     updateStatus('');
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Generate Follow-Up';
+    btn.textContent = 'New Question';
   }
 }
 
@@ -198,11 +193,10 @@ async function handleRecordingStop() {
 }
 
 async function saveAnswer() {
-  const reviewText = document.getElementById('review').value.trim();
   const answer = document.getElementById('answer').value.trim();
 
   if (!state.currentQuestion) {
-    showError('Generate a follow-up question first.');
+    showError('No question loaded yet.');
     return;
   }
 
@@ -223,7 +217,7 @@ async function saveAnswer() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         propertyId: state.propertyId,
-        reviewText,
+        reviewText: '',
         question: state.currentQuestion,
         answer,
         answerSource: state.currentAnswerSource,

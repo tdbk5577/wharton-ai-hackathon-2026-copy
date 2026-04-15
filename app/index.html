@@ -40,18 +40,12 @@
           </div>
         </div>
 
-        <div>
-          <label for="review">Draft Review</label>
-          <textarea id="review" placeholder="Enter your property review..." autofocus>Great location and friendly staff, but the room felt a little dated.</textarea>
-          <button onclick="generateQuestion()" id="askBtn">Generate Follow-Up</button>
-          <div class="status" id="status"></div>
-          <div class="error" id="error"></div>
-        </div>
-
         <div class="question-section">
           <div>
             <label>Follow-Up Question</label>
-            <p class="question-text" id="questionText">No question generated yet.</p>
+            <p class="question-text" id="questionText">Analyzing property reviews...</p>
+            <div class="status" id="status"></div>
+            <div class="error" id="error"></div>
           </div>
 
           <audio id="audio" controls style="display:none;"></audio>
@@ -59,6 +53,7 @@
           <div>
             <button onclick="startRecording()" id="recordBtn">Record Answer</button>
             <button onclick="stopRecording()" id="stopBtn" class="button-secondary" style="display:none;">Stop Recording</button>
+            <button onclick="generateQuestion()" id="askBtn" class="button-secondary">New Question</button>
           </div>
 
           <div class="transcript" id="transcript"></div>

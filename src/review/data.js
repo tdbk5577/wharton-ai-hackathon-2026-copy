@@ -9,9 +9,16 @@ const __dirname = path.dirname(__filename);
 
 export const DEFAULT_REVIEWS_PATH = path.resolve(__dirname, '../../data/Reviews_PROC.csv');
 export const DEFAULT_DESCRIPTIONS_PATH = path.resolve(__dirname, '../../data/Description_PROC.csv');
+export const SUBMITTED_REVIEWS_PATH = path.resolve(__dirname, '../../data/submittedReviews.csv');
+
+const CSV_HEADERS = 'eg_property_id,acquisition_date,lob,rating,review_title,review_text';
 
 let cachedReviews = null;
 let cachedDescriptions = null;
+
+export function clearReviewsCache() {
+  cachedReviews = null;
+}
 
 export function loadReviews(reviewsPath = DEFAULT_REVIEWS_PATH) {
   if (reviewsPath === DEFAULT_REVIEWS_PATH && cachedReviews) {
@@ -27,10 +34,52 @@ export function loadReviews(reviewsPath = DEFAULT_REVIEWS_PATH) {
     .map((row) => normalizeReviewRow(headers, row));
 
   if (reviewsPath === DEFAULT_REVIEWS_PATH) {
-    cachedReviews = reviews;
+    cachedReviews = [...reviews, ...loadSubmittedReviews()];
   }
 
-  return reviews;
+  return reviewsPath === DEFAULT_REVIEWS_PATH ? cachedReviews : reviews;
+}
+
+export function appendSubmittedReview(propertyId, reviewText, reviewTitle = '') {
+  const fileExists = fs.existsSync(SUBMITTED_REVIEWS_PATH);
+  const date = new Date();
+  const acquisitionDate = `${date.getMonth() + 1}/${date.getDate()}/${String(date.getFullYear()).slice(2)}`;
+  const row = [
+    escapeCsvField(propertyId),
+    acquisitionDate,
+    'HOTEL',
+    '',
+    escapeCsvField(reviewTitle),
+    escapeCsvField(reviewText)
+  ].join(',');
+
+  if (!fileExists) {
+    fs.writeFileSync(SUBMITTED_REVIEWS_PATH, CSV_HEADERS + '\n' + row, 'utf8');
+  } else {
+    fs.appendFileSync(SUBMITTED_REVIEWS_PATH, '\n' + row, 'utf8');
+  }
+}
+
+function loadSubmittedReviews() {
+  if (!fs.existsSync(SUBMITTED_REVIEWS_PATH)) return [];
+  try {
+    const csv = fs.readFileSync(SUBMITTED_REVIEWS_PATH, 'utf8');
+    const rows = parseCsv(csv);
+    const [headers, ...records] = rows;
+    return records
+      .filter((row) => row.length > 1)
+      .map((row) => normalizeReviewRow(headers, row));
+  } catch {
+    return [];
+  }
+}
+
+function escapeCsvField(value) {
+  const str = String(value ?? '');
+  if (str.includes(',') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
+    return '"' + str.replaceAll('"', '""') + '"';
+  }
+  return str;
 }
 
 export function loadPropertyDescriptions(descriptionsPath = DEFAULT_DESCRIPTIONS_PATH) {

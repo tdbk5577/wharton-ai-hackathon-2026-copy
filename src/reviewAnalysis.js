@@ -1,5 +1,5 @@
 export { TOPIC_TAXONOMY } from './review/constants.js';
-export { loadReviews, loadPropertyDescriptions, getReviewsForProperty, getPropertyContext } from './review/data.js';
+export { loadReviews, loadPropertyDescriptions, getReviewsForProperty, getPropertyContext, appendSubmittedReview, clearReviewsCache } from './review/data.js';
 export {
   analyzePropertyReviews,
   sortReviewsByDate,

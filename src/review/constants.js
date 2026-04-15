@@ -1,4 +1,4 @@
-export const DEFAULT_RECENT_MONTHS = 12;
+export const DEFAULT_RECENT_MONTHS = 6;
 
 export const TOPIC_TAXONOMY = [
   {

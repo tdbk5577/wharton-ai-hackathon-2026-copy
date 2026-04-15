@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import fs from 'fs';
 import { hasOpenAiKey, openai } from '../config.js';
-import { getPropertyContext, loadPropertyDescriptions } from '../reviewAnalysis.js';
+import { getPropertyContext, loadPropertyDescriptions, appendSubmittedReview, clearReviewsCache } from '../reviewAnalysis.js';
 import { runGapAnalysisAgent } from '../agents/gapAnalysisAgent.js';
 import { runQuestionAgent } from '../agents/questionAgent.js';
 import { runIntegrationAgent } from '../agents/integrationAgent.js';
@@ -35,10 +35,7 @@ router.get('/answers', (req, res) => {
 
 router.post('/generate-question', async (req, res) => {
   try {
-    const { propertyId = DEFAULT_PROPERTY_ID, reviewText } = req.body;
-    if (!reviewText) {
-      return res.status(400).json({ error: 'reviewText required' });
-    }
+    const { propertyId = DEFAULT_PROPERTY_ID, reviewText = '' } = req.body;
 
     const trimmedReview = reviewText.trim();
     const gapAnalysisAgent = runGapAnalysisAgent(propertyId, trimmedReview);
@@ -79,8 +76,8 @@ router.post('/answers', async (req, res) => {
       questionTargetTopic = null
     } = req.body;
 
-    if (!reviewText || !question || !answer) {
-      return res.status(400).json({ error: 'reviewText, question, and answer are required.' });
+    if (!question || !answer) {
+      return res.status(400).json({ error: 'question and answer are required.' });
     }
 
     const integrationAgent = await runIntegrationAgent({
@@ -107,6 +104,8 @@ router.post('/answers', async (req, res) => {
     };
 
     saveAnswerRecord(record);
+    appendSubmittedReview(propertyId, answer.trim(), question.trim());
+    clearReviewsCache();
 
     res.status(201).json({
       answer: record,
