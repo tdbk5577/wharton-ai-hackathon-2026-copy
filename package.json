@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "node src/server.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "build": "cd user && npm install && npm run build"
   },
   "dependencies": {
     "dotenv": "^17.4.2",
