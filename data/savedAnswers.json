@@ -1,5 +1,21 @@
 [
   {
+    "id": "3effb3b2-5e2b-49c7-881d-98ef34a4fc2b",
+    "propertyId": "db38b19b897dbece3e34919c662b3fd66d23b615395d11fb69264dd3a9b17723",
+    "reviewText": "",
+    "question": "How would you rate the cleanliness of your room during your stay?",
+    "answer": "The room was very clean. (Rating: 4/5 stars)",
+    "answerSource": "text",
+    "questionTargetTopic": "cleanliness",
+    "enrichedReviewSnippet": "The room was very clean during my stay, which I would rate 4 out of 5 stars.",
+    "extractedTopics": [
+      "cleanliness",
+      "room_comfort"
+    ],
+    "whatWeLearned": "The room was rated 4/5 stars for cleanliness.",
+    "createdAt": "2026-04-15T18:30:18.824Z"
+  },
+  {
     "id": "075a2542-9e8d-46e0-a6c2-2797dcf017f7",
     "propertyId": "db38b19b897dbece3e34919c662b3fd66d23b615395d11fb69264dd3a9b17723",
     "reviewText": "Great location and friendly staff, but the room felt a little dated.",

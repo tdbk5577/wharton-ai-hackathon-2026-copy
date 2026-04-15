@@ -7,11 +7,17 @@ import apiRoutes from './routes/api.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const appDirectory = path.resolve(__dirname, '../app');
+const userDirectory = path.resolve(__dirname, '../user/dist');
 
 const app = express();
 
 app.use(express.json({ limit: '50mb' }));
+app.use('/user', express.static(userDirectory));
 app.use(express.static(appDirectory));
+
+app.get('/user', (req, res) => {
+  res.sendFile(path.join(userDirectory, 'index.html'));
+});
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(appDirectory, 'index.html'));
