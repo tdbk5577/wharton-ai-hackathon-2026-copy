@@ -3,7 +3,8 @@ const state = {
   currentQuestion: null,
   currentQuestionTargetTopic: null,
   currentAnswerSource: 'text',
-  gapAnalysisAgent: null
+  gapAnalysisAgent: null,
+  starRating: 0
 };
 
 let mediaRecorder;
@@ -14,6 +15,9 @@ window.generateQuestion = generateQuestion;
 window.startRecording = startRecording;
 window.stopRecording = stopRecording;
 window.saveAnswer = saveAnswer;
+window.setRating = setRating;
+window.hoverRating = hoverRating;
+window.clearHover = clearHover;
 
 initialize();
 
@@ -105,6 +109,8 @@ async function generateQuestion() {
 
     document.getElementById('answer').value = '';
     document.getElementById('transcript').classList.remove('show');
+    state.starRating = 0;
+    updateStars(0);
 
     const audio = document.getElementById('audio');
     if (data.audio) {
@@ -192,8 +198,30 @@ async function handleRecordingStop() {
   reader.readAsDataURL(audioBlob);
 }
 
+function setRating(value) {
+  state.starRating = value;
+  updateStars(value);
+}
+
+function hoverRating(value) {
+  updateStars(value);
+}
+
+function clearHover() {
+  updateStars(state.starRating);
+}
+
+function updateStars(activeCount) {
+  document.querySelectorAll('.star').forEach((star, index) => {
+    star.classList.toggle('active', index < activeCount);
+  });
+}
+
 async function saveAnswer() {
-  const answer = document.getElementById('answer').value.trim();
+  const answerText = document.getElementById('answer').value.trim();
+  const answer = state.starRating > 0
+    ? `${answerText}${answerText ? ' ' : ''}(Rating: ${state.starRating}/5 stars)`
+    : answerText;
 
   if (!state.currentQuestion) {
     showError('No question loaded yet.');
@@ -201,7 +229,7 @@ async function saveAnswer() {
   }
 
   if (!answer) {
-    showError('Please provide an answer.');
+    showError('Please provide an answer or a star rating.');
     return;
   }
 
