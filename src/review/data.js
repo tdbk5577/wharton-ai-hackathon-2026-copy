@@ -3,13 +3,17 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { parseCsv, parseJsonArray, parseRating, parseReviewDate } from './csv.js';
 import { sanitizeHtmlSnippet } from './text.js';
+import { resolveWritableDataPath } from '../utils/runtimePaths.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export const DEFAULT_REVIEWS_PATH = path.resolve(__dirname, '../../data/Reviews_PROC.csv');
 export const DEFAULT_DESCRIPTIONS_PATH = path.resolve(__dirname, '../../data/Description_PROC.csv');
-export const SUBMITTED_REVIEWS_PATH = path.resolve(__dirname, '../../data/submittedReviews.csv');
+export const SUBMITTED_REVIEWS_PATH = resolveWritableDataPath(
+  'submittedReviews.csv',
+  path.resolve(__dirname, '../../data/submittedReviews.csv')
+);
 
 const CSV_HEADERS = 'eg_property_id,acquisition_date,lob,rating,review_title,review_text';
 

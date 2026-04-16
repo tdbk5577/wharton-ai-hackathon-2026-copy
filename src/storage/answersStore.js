@@ -1,10 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { resolveWritableDataPath } from '../utils/runtimePaths.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const ANSWERS_PATH = path.resolve(__dirname, '../../data/savedAnswers.json');
+const ANSWERS_PATH = resolveWritableDataPath(
+  'savedAnswers.json',
+  path.resolve(__dirname, '../../data/savedAnswers.json')
+);
 
 export function loadSavedAnswers() {
   if (!fs.existsSync(ANSWERS_PATH)) {
