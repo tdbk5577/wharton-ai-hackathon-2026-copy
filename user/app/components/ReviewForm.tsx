@@ -6,10 +6,20 @@ import { VoiceButton } from "./VoiceButton";
 interface ReviewFormProps {
   questionText: string;
   questionTargetTopic: string | null;
+  audioUrl: string | null;
   onSubmit: (answer: string, answerSource: string) => void;
 }
 
-export function ReviewForm({ questionText, questionTargetTopic, onSubmit }: ReviewFormProps) {
+function playAudio(audioUrl: string): Promise<void> {
+  return new Promise((resolve) => {
+    const audio = new Audio(audioUrl);
+    audio.onended = resolve;
+    audio.onerror = () => resolve();
+    audio.play().catch(() => resolve());
+  });
+}
+
+export function ReviewForm({ questionText, questionTargetTopic, audioUrl, onSubmit }: ReviewFormProps) {
   const [answer, setAnswer] = useState("");
   const [isVoiceMode, setIsVoiceMode] = useState(false);
   const [overallRating, setOverallRating] = useState(0);
@@ -33,6 +43,7 @@ export function ReviewForm({ questionText, questionTargetTopic, onSubmit }: Revi
     return (
       <VoiceReviewMode
         questionText={questionText}
+        audioUrl={audioUrl}
         onSubmit={(answer: string) => onSubmit(answer, 'voice')}
         onBackToText={() => setIsVoiceMode(false)}
       />
@@ -50,7 +61,10 @@ export function ReviewForm({ questionText, questionTargetTopic, onSubmit }: Revi
 
           {/* Voice mode toggle */}
           <button
-            onClick={() => setIsVoiceMode(true)}
+            onClick={async () => {
+              if (audioUrl) await playAudio(audioUrl);
+              setIsVoiceMode(true);
+            }}
             className="px-4 py-2 rounded-full transition-all duration-300 flex items-center gap-2
                        bg-white text-foreground shadow-[0_2px_8px_rgba(0,0,0,0.08)]"
           >
@@ -133,6 +147,7 @@ export function ReviewForm({ questionText, questionTargetTopic, onSubmit }: Revi
                   setAnswer(text);
                   setIsRecording(false);
                 }}
+                onBeforeRecord={audioUrl ? () => playAudio(audioUrl) : undefined}
               />
             </div>
           </div>

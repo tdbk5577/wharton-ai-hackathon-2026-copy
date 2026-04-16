@@ -10,6 +10,7 @@ type AppState = 'loading' | 'review' | 'processing' | 'completed';
 interface QuestionData {
   questionText: string;
   questionTargetTopic: string | null;
+  audioUrl: string | null;
 }
 
 export default function App() {
@@ -35,6 +36,7 @@ export default function App() {
       setQuestionData({
         questionText,
         questionTargetTopic: data.gapAnalysisAgent?.targetTopic || data.questionTargetTopic || null,
+        audioUrl: data.audio || null,
       });
       setState('review');
     } catch (err) {
@@ -111,6 +113,7 @@ export default function App() {
               <ReviewForm
                 questionText={questionData.questionText}
                 questionTargetTopic={questionData.questionTargetTopic}
+                audioUrl={questionData.audioUrl}
                 onSubmit={handleReviewSubmit}
               />
             </div>
