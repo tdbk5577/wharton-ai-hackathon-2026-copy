@@ -50,10 +50,20 @@
 
           <audio id="audio" controls style="display:none;"></audio>
 
+          <div class="star-rating">
+            <span class="star-label">Leave a rating</span>
+            <div class="stars" id="starRating">
+              <button class="star" data-value="1" onclick="setRating(1)" onmouseenter="hoverRating(1)" onmouseleave="clearHover()">★</button>
+              <button class="star" data-value="2" onclick="setRating(2)" onmouseenter="hoverRating(2)" onmouseleave="clearHover()">★</button>
+              <button class="star" data-value="3" onclick="setRating(3)" onmouseenter="hoverRating(3)" onmouseleave="clearHover()">★</button>
+              <button class="star" data-value="4" onclick="setRating(4)" onmouseenter="hoverRating(4)" onmouseleave="clearHover()">★</button>
+              <button class="star" data-value="5" onclick="setRating(5)" onmouseenter="hoverRating(5)" onmouseleave="clearHover()">★</button>
+            </div>
+          </div>
+
           <div>
             <button onclick="startRecording()" id="recordBtn">Record Answer</button>
             <button onclick="stopRecording()" id="stopBtn" class="button-secondary" style="display:none;">Stop Recording</button>
-            <button onclick="generateQuestion()" id="askBtn" class="button-secondary">New Question</button>
           </div>
 
           <div class="transcript" id="transcript"></div>

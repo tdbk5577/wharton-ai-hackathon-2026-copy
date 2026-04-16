@@ -5,9 +5,10 @@ interface VoiceButtonProps {
   isRecording: boolean;
   onToggle: () => void;
   onTranscript: (text: string) => void;
+  onBeforeRecord?: () => Promise<void>;
 }
 
-export function VoiceButton({ isRecording, onToggle, onTranscript }: VoiceButtonProps) {
+export function VoiceButton({ isRecording, onToggle, onTranscript, onBeforeRecord }: VoiceButtonProps) {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const streamRef = useRef<MediaStream | null>(null);
@@ -22,6 +23,9 @@ export function VoiceButton({ isRecording, onToggle, onTranscript }: VoiceButton
     } else {
       // Start recording
       try {
+        if (onBeforeRecord) {
+          await onBeforeRecord();
+        }
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         streamRef.current = stream;
         const mediaRecorder = new MediaRecorder(stream);

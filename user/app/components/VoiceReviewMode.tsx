@@ -3,8 +3,18 @@ import { Mic, MicOff, ArrowLeft, Send } from 'lucide-react';
 
 interface VoiceReviewModeProps {
   questionText: string;
+  audioUrl: string | null;
   onSubmit: (answer: string) => void;
   onBackToText: () => void;
+}
+
+function playAudio(audioUrl: string): Promise<void> {
+  return new Promise((resolve) => {
+    const audio = new Audio(audioUrl);
+    audio.onended = resolve;
+    audio.onerror = () => resolve();
+    audio.play().catch(() => resolve());
+  });
 }
 
 interface ConversationMessage {
@@ -13,7 +23,7 @@ interface ConversationMessage {
   text: string;
 }
 
-export function VoiceReviewMode({ questionText, onSubmit, onBackToText }: VoiceReviewModeProps) {
+export function VoiceReviewMode({ questionText, audioUrl, onSubmit, onBackToText }: VoiceReviewModeProps) {
   const [isRecording, setIsRecording] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [textInput, setTextInput] = useState('');
@@ -47,6 +57,9 @@ export function VoiceReviewMode({ questionText, onSubmit, onBackToText }: VoiceR
 
   const startRecording = async () => {
     try {
+      if (audioUrl) {
+        await playAudio(audioUrl);
+      }
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
       const mediaRecorder = new MediaRecorder(stream);
