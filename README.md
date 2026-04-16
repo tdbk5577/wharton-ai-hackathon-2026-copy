@@ -2,16 +2,15 @@
 
 Ask What Matters is a submission-ready prototype for the Wharton/Expedia Hack-AI-thon. It uses the provided Expedia property datasets to detect what information is missing or stale for a hotel, asks one smart follow-up question, and captures the traveler’s answer by text or voice.
 
-For a short recorded walkthrough, use [docs/demo-script.md](/Users/bryanyang/Repos/wharton-ai-hackathon-2026/docs/demo-script.md).
+For a short recorded walkthrough, use https://www.loom.com/share/d5d2de466ea049969134275af875d84b.
 
 ## Challenge Framing
 
 Static review prompts miss what matters most for a specific property right now. This prototype focuses on one polished flow:
 
-1. A traveler writes a short review.
-2. A data-driven agent identifies the most useful missing or stale topic for that property.
-3. A question-generation agent asks one short follow-up.
-4. An integration agent saves the answer and summarizes what new information was learned.
+1. A data-driven agent identifies the most useful missing or stale topic for that property.
+2. A question-generation agent asks one short follow-up.
+3. An integration agent saves the answer and summarizes what new information was learned.
 
 ## 3-Agent Workflow
 
@@ -56,7 +55,7 @@ The demo uses a compact topic taxonomy:
 
 A topic is considered:
 - `missing` if it never appears in historical reviews for the property
-- `stale` if it appears in older reviews but not within the latest 12 months of review history
+- `stale` if it appears in older reviews but not within the latest 6 months of review history
 - `covered` otherwise
 
 This heuristic is intentionally simple and explicit for demo clarity.
@@ -150,7 +149,6 @@ Before submission:
 - `src/routes/api.js` - API endpoints and 3-agent orchestration
 - `src/reviewAnalysis.js` - compatibility export surface for review intelligence
 - `src/config.js` - OpenAI client configuration
-- `app/index.html` - single-page demo frontend
 - `data/savedAnswers.json` - local saved answer history
 - `docs/` - demo script, architecture notes, and hackathon reference materials
 
